@@ -59,8 +59,8 @@ void imprimir_vector(vector<Carro*>& carros) {
 char** crear_estacionamiento(int tamanio) {
 	char** estacionamiento = new char* [tamanio];
 	for (int i = 0; i < tamanio; i++) {
-		for (int j = 0; j < tamanio; j++){
 			estacionamiento[i] = new char[tamanio];
+		for (int j = 0; j < tamanio; j++){
 			estacionamiento[i][j] = '_';
 		}
 	}
@@ -97,12 +97,12 @@ void agregar_carros(int tamanio, vector<Carro*>& carros_ingresados, char** estac
 			color = "Amarillo";
 			break;
 		}
-		int posicion_x;
-		int posicion_y;
+		int posicion_x = 0;
+		int posicion_y = 0;
 		do {
 			posicion_x = rand() % tamanio;
 			posicion_y = rand() % tamanio;
-		} while (estacionamiento[posicion_x][posicion_y] == '_');
+		} while (estacionamiento[posicion_x][posicion_y] != '_');
 		Carro* carro = new Carro(tipo_vehiculo, color, saldo, posicion_x, posicion_y, false);
 		estacionamiento[posicion_x][posicion_y] = carro->representacion(carro->getTipo());
 		carros_ingresados.push_back(carro);
@@ -116,15 +116,86 @@ void imprimir_esttacionamiento(int tamanio, char** estacionamiento) {
 		cout << endl;
 	}
 }
-int main() {
-	srand(time(0));
-	int respuesta;
-	int** matriz;
-	char** estacionamiento;
+void ejercicio_1() {
 	int tamano;
+	int** matriz;
+	do {
+		cout << "Ingrese el numero de filas del Triangulo de Pascal: \n";
+		cin >> tamano;
+	} while (tamano < 3 || tamano > 5);
+	matriz = reservarEspacioDelTriangulo(tamano);
+	matriz = generartriangulopascal(tamano, matriz);
+	imprimirTrianguloPascal(matriz, tamano);
+	liberarMemoria(matriz, tamano);
+}
+void ejercicio_2() {
+	srand(time(0));
+	char** estacionamiento;
 	int menu_estacionamiento = 0;
 	vector<Carro*> carros;
 	vector<Carro*> carros_ingresados;
+	int tamanio_estacionamiento;
+	do {
+		cout << "Ingrese el tamanio del estacionamiento: ";
+		cin >> tamanio_estacionamiento;
+	} while (tamanio_estacionamiento <= 3);
+	estacionamiento = crear_estacionamiento(tamanio_estacionamiento);
+	agregar_carros(tamanio_estacionamiento, carros_ingresados, estacionamiento);
+	do {
+		cout << "---ESTACIONAMIENTO---\n";
+		imprimir_esttacionamiento(tamanio_estacionamiento, estacionamiento);
+		cout << "\n Opciones \n";
+		cout << "1. Nuevo Carro\n";
+		cout << "2. Ingresar Carro al estacionamiento\n";
+		cout << "3. Sacar Carro del estacionaminto\n";
+		cout << "4. Ver Carros creados sin ingresar\n";
+		cout << "5. Salir\n";
+		cin >> menu_estacionamiento;
+		switch (menu_estacionamiento) {
+		case 1: {
+			string tipo;
+			string color;
+			float saldo;
+			cout << "Ingrese el tipo de Carro: ";
+			cin >> tipo;
+			cout << "Ingrese el color de Carro ";
+			cin >> color;
+			cout << "Ingrese saldo de Carro ";
+			cin >> saldo;
+			Carro* carro = new Carro(tipo, color, saldo, -1, -1, false);
+			carros.push_back(carro);
+			cout << "Carro creado y listo para ingresar\n";
+		}
+			  break;
+		case 2:
+			int numero_carro;
+			if (carros.size() == 0) {
+				cout << "No hay carros creados sin ingresar\n";
+			}
+			else {
+				cout << "Carros disponibles para ingresar: \n";
+				imprimir_vector(carros);
+				cout << "Seleccione el numero del carro disponible: ";
+				cin >> numero_carro;
+				carros[numero_carro -1]->getTipo();
+			}
+			break;
+		case 4:
+			if (carros.size() == 0) {
+				cout << "No hay carros creados sin ingresar\n";
+			}
+			else {
+				cout << "Carros disponibles para ingresar: \n";
+				imprimir_vector(carros);
+			}
+			break;
+		default:
+			break;
+		}
+	} while (menu_estacionamiento != 5);
+}
+void menu() {
+	int respuesta;
 	do {
 		cout << "--MENU--\n";
 		cout << "1. Triangulo Pascal\n";
@@ -133,75 +204,16 @@ int main() {
 		cin >> respuesta;
 		switch (respuesta) {
 		case 1:
-			do {
-				cout << "Ingrese el numero de filas del Triangulo de Pascal: \n";
-				cin >> tamano;
-			} while (tamano < 3 || tamano > 5);
-			matriz = reservarEspacioDelTriangulo(tamano);
-			matriz = generartriangulopascal(tamano, matriz);
-			imprimirTrianguloPascal(matriz, tamano);
-			liberarMemoria(matriz, tamano);
+			ejercicio_1();
 			break;
 		case 2:
-			int tamanio_estacionamiento;
-			do {
-				cout << "Ingrese el tamanio del estacionamiento: ";
-				cin >> tamanio_estacionamiento;
-			} while (tamanio_estacionamiento <= 3);
-			do{
-				cout << "---ESTACIONAMIENTO---\n";
-				estacionamiento = crear_estacionamiento(tamanio_estacionamiento);
-				agregar_carros(tamanio_estacionamiento, carros_ingresados,estacionamiento);
-				imprimir_esttacionamiento(tamanio_estacionamiento, estacionamiento);
-
-				cout << "\n Opciones \n";
-				cout << "1. Nuevo Carro\n";
-				cout << "2. Ingresar Carro al estacionamiento\n";
-				cout << "3. Sacar Carro del estacionaminto\n";
-				cout << "4. Ver Carros creados sin ingresar\n";
-				cout << "5. Salir\n";
-				cin >> menu_estacionamiento;
-				switch (menu_estacionamiento) {
-				case 1: {
-					string tipo;
-					string color;
-					float saldo;
-					cout << "Ingrese el tipo de Carro: ";
-					cin >> tipo;
-					cout << "Ingrese el color de Carro ";
-					cin >> color;
-					cout << "Ingrese saldo de Carro ";
-					cin >> saldo;
-					Carro* carro = new Carro(tipo, color, saldo, -1, -1, false);
-					carros.push_back(carro);
-					cout << "Carro creado y listo para ingresar\n";
-				}
-					break;
-				case 2:
-					if (carros.size() == 0) {
-						cout << "No hay carros creados sin ingresar\n";
-					}
-					else {
-						cout << "Carros disponibles para ingresar: \n";
-						imprimir_vector(carros);
-					}
-					break;
-				case 4:
-					if (carros.size() == 0) {
-						cout << "No hay carros creados sin ingresar\n";
-					}
-					else {
-						cout << "Carros disponibles para ingresar: \n";
-						imprimir_vector(carros);
-					}
-					break;
-				default:
-					break;
-				}
-			} while (menu_estacionamiento != 5);
+			ejercicio_2();
 			break;
 		default:
 			break;
 		}
 	} while (respuesta);
+}
+int main() {
+	menu();
 }

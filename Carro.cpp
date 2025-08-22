@@ -7,7 +7,9 @@ Carro::Carro(string _tipo_vehiculo, string _color, float _saldo, int _x, int _y,
 	y = _y;
 	pagado = _pagado;
 }
-
+Carro::~Carro() {
+	
+}
 
 string Carro::getTipo() {
 	return tipo_vehiculo;
