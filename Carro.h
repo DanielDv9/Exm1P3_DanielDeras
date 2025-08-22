@@ -17,7 +17,7 @@ public:
 	float getSaldo();
 	bool getPagado();
 	void pagar();
-	char representacion(string _nombre);
+	char representacion(string _tipo);
 	void ingresar_carro();
 	void retirar_carro();
 };

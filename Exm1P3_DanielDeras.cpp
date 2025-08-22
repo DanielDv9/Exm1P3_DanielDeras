@@ -44,20 +44,35 @@ void liberarMemoria(int** triangulo, int tamanio) {
 	}
 	delete[] triangulo;
 }
-void crear_estacionamiento(int tamanio) {
-	/*char** estacionamiento = new char* [tamanio];
+void imprimir_vector(vector<Carro*>& carros) {
+	for (int i = 0; i < carros.size(); i++) {
+		cout << i + 1 << ". " << carros[i]->getTipo() << " - " << "Color: " << carros[i]->getColor() << " - " << "Saldo:" << carros[i]->getSaldo() << " - " << "Pagado: ";
+		if (carros[i]->getPagado()) {
+			cout << "si\n";
+		}
+		else {
+			cout << "no\n";
+		}
+		cout << endl;
+	}
+}
+char** crear_estacionamiento(int tamanio) {
+	char** estacionamiento = new char* [tamanio];
 	for (int i = 0; i < tamanio; i++) {
 		for (int j = 0; j < tamanio; j++){
 			estacionamiento[i] = new char[tamanio];
 			estacionamiento[i][j] = '_';
 		}
 	}
-	int cantidad_carros =  5 + rand() % (15 - 5 + 1);
+	return estacionamiento;
+}
+void agregar_carros(int tamanio, vector<Carro*>& carros_ingresados, char** estacionamiento) {
+	int cantidad_carros = 5 + rand() % (15 - 5 + 1);
 	string tipo_vehiculo;
 	string color;
-	float saldo = rand() % 100;
 	bool pagado;
 	for (int i = 0; i < cantidad_carros; i++) {
+		float saldo = rand() % 100;
 		int num_random = rand() % 3;
 		switch (num_random) {
 		case 0:
@@ -82,16 +97,34 @@ void crear_estacionamiento(int tamanio) {
 			color = "Amarillo";
 			break;
 		}
-		Carro* carro = new Carro(tipo_vehiculo, color, saldo, -1, -1, false);
-	}*/
+		int posicion_x;
+		int posicion_y;
+		do {
+			posicion_x = rand() % tamanio;
+			posicion_y = rand() % tamanio;
+		} while (estacionamiento[posicion_x][posicion_y] == '_');
+		Carro* carro = new Carro(tipo_vehiculo, color, saldo, posicion_x, posicion_y, false);
+		estacionamiento[posicion_x][posicion_y] = carro->representacion(carro->getTipo());
+		carros_ingresados.push_back(carro);
+	}
+}
+void imprimir_esttacionamiento(int tamanio, char** estacionamiento) {
+	for (int i = 0; i < tamanio; i++) {
+		for (int j = 0; j < tamanio; j++) {
+			cout << estacionamiento[i][j] << ' ';
+		}
+		cout << endl;
+	}
 }
 int main() {
 	srand(time(0));
 	int respuesta;
 	int** matriz;
+	char** estacionamiento;
 	int tamano;
 	int menu_estacionamiento = 0;
 	vector<Carro*> carros;
+	vector<Carro*> carros_ingresados;
 	do {
 		cout << "--MENU--\n";
 		cout << "1. Triangulo Pascal\n";
@@ -117,6 +150,10 @@ int main() {
 			} while (tamanio_estacionamiento <= 3);
 			do{
 				cout << "---ESTACIONAMIENTO---\n";
+				estacionamiento = crear_estacionamiento(tamanio_estacionamiento);
+				agregar_carros(tamanio_estacionamiento, carros_ingresados,estacionamiento);
+				imprimir_esttacionamiento(tamanio_estacionamiento, estacionamiento);
+
 				cout << "\n Opciones \n";
 				cout << "1. Nuevo Carro\n";
 				cout << "2. Ingresar Carro al estacionamiento\n";
@@ -141,23 +178,21 @@ int main() {
 				}
 					break;
 				case 2:
-
+					if (carros.size() == 0) {
+						cout << "No hay carros creados sin ingresar\n";
+					}
+					else {
+						cout << "Carros disponibles para ingresar: \n";
+						imprimir_vector(carros);
+					}
 					break;
 				case 4:
 					if (carros.size() == 0) {
 						cout << "No hay carros creados sin ingresar\n";
 					}
 					else {
-						for (int i = 0; i < carros.size(); i++) {
-							cout << i + 1 << ". " << carros[i]->getTipo() << " - " << "Color: " << carros[i]->getColor() << " - " << "Saldo:" << carros[i]->getSaldo() << " - " << "Pagado: ";
-							if (carros[i]->getPagado()) {
-								cout << "si\n";
-							}
-							else {
-								cout << "no\n";
-							}
-							cout << endl;
-						}
+						cout << "Carros disponibles para ingresar: \n";
+						imprimir_vector(carros);
 					}
 					break;
 				default:

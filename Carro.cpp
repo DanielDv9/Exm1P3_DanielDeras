@@ -21,8 +21,8 @@ float Carro::getSaldo() {
 bool Carro::getPagado() {
 	return pagado;
 }
-char Carro::representacion(string _nombre) {
-	return _nombre[0];
+char Carro::representacion(string _tipo) {
+	return _tipo[0];
 }
 void Carro::ingresar_carro() {
 
