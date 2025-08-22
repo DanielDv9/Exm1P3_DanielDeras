@@ -26,6 +26,16 @@ bool Carro::getPagado() {
 char Carro::representacion(string _tipo) {
 	return _tipo[0];
 }
-void Carro::ingresar_carro() {
-
+void Carro::ingresar_carro(char** estacionamiento, int tamano) {
+	//Metooo que valida la posicione ingresa al estacionamiento
+	int posicion_x = 0;
+	int posicion_y = 0;
+	do {
+		posicion_x = rand() % tamano;
+		posicion_y = rand() % tamano;
+	} while (estacionamiento[posicion_x][posicion_y] != '_' );
+	estacionamiento[posicion_x][posicion_y] = representacion(tipo_vehiculo);
+	cout << "Carro ingresado en la posicion: (" << posicion_x << "," << posicion_y << ")" << endl;;
+	x = posicion_x;
+	y = posicion_y;
 }

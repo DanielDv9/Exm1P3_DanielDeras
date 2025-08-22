@@ -4,6 +4,7 @@
 #include <ctime>
 #include <vector>
 using namespace std;
+//Reserva el espacio del triangulo
 int** reservarEspacioDelTriangulo(int tamanio) {
 	int** matriz = new int* [tamanio];
 	for (int i = 0; i < tamanio; i++) {
@@ -11,6 +12,7 @@ int** reservarEspacioDelTriangulo(int tamanio) {
 	}
 	return matriz;
 }
+//Metodo recursivo que retorna para obtener el numero pascal
 int pascal(int fila, int columna) {
 	if (columna == 0 || columna == fila) {
 		return 1;
@@ -19,6 +21,7 @@ int pascal(int fila, int columna) {
 		return (pascal(fila - 1, columna - 1) + pascal(fila - 1, columna));
 	}
 }
+//Metodoo que asigna al espacio el numero de pascal usando el metodo recursivo
 int** generartriangulopascal(int tamanio, int** matriz) {
 	for (int i = 0; i < tamanio; i++) {
 		for (int j = 0; j <= i; j++) {
@@ -27,8 +30,9 @@ int** generartriangulopascal(int tamanio, int** matriz) {
 	}
 	return matriz;
 }
+//Imprime el triangulo de PAscal, imprimiendo pirmero los espacion y luego el triangulo 
 void imprimirTrianguloPascal(int** triangulo, int tamanio) {
-	for (int i = 0; i < tamanio; i++){
+	for (int i = 0; i < tamanio; i++) {
 		for (int k = 0; k < tamanio - i; k++) {
 			cout << " ";
 		}
@@ -38,12 +42,14 @@ void imprimirTrianguloPascal(int** triangulo, int tamanio) {
 		cout << endl;
 	}
 }
+//Libera memoria del triangulo
 void liberarMemoria(int** triangulo, int tamanio) {
 	for (int i = 0; i < tamanio; i++) {
 		delete[] triangulo[i];
 	}
 	delete[] triangulo;
 }
+//Imprime los vectores de Carros
 void imprimir_vector(vector<Carro*>& carros) {
 	for (int i = 0; i < carros.size(); i++) {
 		cout << i + 1 << ". " << carros[i]->getTipo() << " - " << "Color: " << carros[i]->getColor() << " - " << "Saldo:" << carros[i]->getSaldo() << " - " << "Pagado: ";
@@ -56,16 +62,18 @@ void imprimir_vector(vector<Carro*>& carros) {
 		cout << endl;
 	}
 }
+//Reserva memoria del estacionamiento
 char** crear_estacionamiento(int tamanio) {
 	char** estacionamiento = new char* [tamanio];
 	for (int i = 0; i < tamanio; i++) {
-			estacionamiento[i] = new char[tamanio];
-		for (int j = 0; j < tamanio; j++){
+		estacionamiento[i] = new char[tamanio];
+		for (int j = 0; j < tamanio; j++) {
 			estacionamiento[i][j] = '_';
 		}
 	}
 	return estacionamiento;
 }
+//Metodo que crea el numero de carros con un random y luego los guarda aun vector 
 void agregar_carros(int tamanio, vector<Carro*>& carros_ingresados, char** estacionamiento) {
 	int cantidad_carros = 5 + rand() % (15 - 5 + 1);
 	string tipo_vehiculo;
@@ -99,6 +107,7 @@ void agregar_carros(int tamanio, vector<Carro*>& carros_ingresados, char** estac
 		}
 		int posicion_x = 0;
 		int posicion_y = 0;
+		//Valida si esta vacia la posicion
 		do {
 			posicion_x = rand() % tamanio;
 			posicion_y = rand() % tamanio;
@@ -108,6 +117,7 @@ void agregar_carros(int tamanio, vector<Carro*>& carros_ingresados, char** estac
 		carros_ingresados.push_back(carro);
 	}
 }
+//Imprime el estacionamiento
 void imprimir_esttacionamiento(int tamanio, char** estacionamiento) {
 	for (int i = 0; i < tamanio; i++) {
 		for (int j = 0; j < tamanio; j++) {
@@ -135,6 +145,7 @@ void ejercicio_2() {
 	vector<Carro*> carros;
 	vector<Carro*> carros_ingresados;
 	int tamanio_estacionamiento;
+	//Valida si el nummero es correcto
 	do {
 		cout << "Ingrese el tamanio del estacionamiento: ";
 		cin >> tamanio_estacionamiento;
@@ -152,6 +163,7 @@ void ejercicio_2() {
 		cout << "5. Salir\n";
 		cin >> menu_estacionamiento;
 		switch (menu_estacionamiento) {
+			//Crea un nuevo carro
 		case 1: {
 			string tipo;
 			string color;
@@ -167,6 +179,7 @@ void ejercicio_2() {
 			cout << "Carro creado y listo para ingresar\n";
 		}
 			  break;
+			  //Agrega uncarro al estacionamiento
 		case 2:
 			int numero_carro;
 			if (carros.size() == 0) {
@@ -177,10 +190,11 @@ void ejercicio_2() {
 				imprimir_vector(carros);
 				cout << "Seleccione el numero del carro disponible: ";
 				cin >> numero_carro;
-				carros[numero_carro -1]->getTipo();
+				carros[numero_carro - 1]->ingresar_carro(estacionamiento, tamanio_estacionamiento);
 			}
 			break;
 		case 4:
+			//Impriime todos los carros no ingresado
 			if (carros.size() == 0) {
 				cout << "No hay carros creados sin ingresar\n";
 			}
@@ -193,6 +207,17 @@ void ejercicio_2() {
 			break;
 		}
 	} while (menu_estacionamiento != 5);
+	//Borra toda la memoria
+	for (int i = 0; i < tamanio_estacionamiento; i++) {
+		delete[] estacionamiento[i];
+	}
+	delete[] estacionamiento;
+	for (int i = 0; i < carros.size(); i++) {
+		delete carros[i];
+	}
+	for (int i = 0; i < carros_ingresados.size(); i++) {
+		delete carros_ingresados[i];
+	}
 }
 void menu() {
 	int respuesta;

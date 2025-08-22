@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include <iostream>
 #include <cstring>
 using namespace std;
@@ -18,7 +19,7 @@ public:
 	bool getPagado();
 	void pagar();
 	char representacion(string _tipo);
-	void ingresar_carro();
+	void ingresar_carro(char** estacionamiento, int tamano);
 	void retirar_carro();
 };
 
